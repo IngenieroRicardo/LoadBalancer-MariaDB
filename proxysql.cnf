@@ -1,0 +1,36 @@
+datadir="/var/lib/proxysql"
+
+admin_variables=
+{
+  admin_credentials="admin:admin"
+  mysql_ifaces="0.0.0.0:6032"
+}
+
+mysql_variables=
+{
+  threads=4
+  max_connections=2048
+  default_query_delay=0
+  default_query_timeout=10000
+  monitor_username="monitor"
+  monitor_password="monitorpass"
+}
+
+mysql_servers =
+(
+  { address="db-master", port=3306, hostgroup=10, max_connections=100 },
+  { address="db-slave1", port=3306, hostgroup=20, max_connections=100 },
+  { address="db-slave2", port=3306, hostgroup=20, max_connections=100 }
+)
+
+mysql_users =
+(
+  { username = "root" , password = "rootpass" , default_hostgroup = 10, active = 1 }
+)
+
+mysql_query_rules =
+(
+  # All SELECT go to slaves (hostgroup 20)
+  { rule_id=1, active=1, match_pattern="^SELECT.*COUNT\\(.*\\)", destination_hostgroup=20, apply=1 },
+  { rule_id=2, active=1, match_pattern="^SELECT ((?!\\().)* FROM", destination_hostgroup=20, apply=1 }
+)
