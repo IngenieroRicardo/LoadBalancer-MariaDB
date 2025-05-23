@@ -1,5 +1,4 @@
-# LoadBalancer-MariaDB
-Balanceador de carga y Cluster MariaDB Master-Slave
+# Balanceador de carga y Cluster MariaDB Master-Slave
 
 ```
 mysql --user=root --password=rootpass --host=127.0.0.1 --port=6033
